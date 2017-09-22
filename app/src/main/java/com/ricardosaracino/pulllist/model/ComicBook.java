@@ -16,6 +16,8 @@ public class ComicBook {
 
     private String format;
 
+    private String imagePath;
+
     public ComicBook() {
     }
 
@@ -73,5 +75,13 @@ public class ComicBook {
 
     public void setFormat(String format) {
         this.format = format;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

@@ -1,6 +1,7 @@
 package com.ricardosaracino.pulllist.hydrator;
 
 import com.ricardosaracino.pulllist.model.ComicBook;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ComicBookJsonHydrator extends AbstractHydrator<ComicBook, JSONObject> {
@@ -20,6 +21,15 @@ public class ComicBookJsonHydrator extends AbstractHydrator<ComicBook, JSONObjec
         comicBook.setVariantDescription(jsonObject.getString("variantDescription"));
 
         comicBook.setDescription(jsonObject.isNull("description") ? "" : jsonObject.getString("description"));
+
+        JSONArray images = jsonObject.getJSONArray("images");
+
+        if(images.length() > 0) {
+
+            JSONObject image = (JSONObject) images.get(0);
+
+            comicBook.setImagePath(image.getString("path"));
+        }
 
         return comicBook;
     }

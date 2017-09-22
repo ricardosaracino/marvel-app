@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import com.ricardosaracino.pulllist.R;
 import com.ricardosaracino.pulllist.adapter.ComicBookListAdapter;
@@ -30,7 +30,7 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
 
     private int count;
     private int limit;
-    private int offset;
+    private int offset = 1000;
     private int total;
 
 
@@ -73,6 +73,8 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
     @Override
     public void onLoadFinished(final Loader<List<ComicBook>> loader, List<ComicBook> data) {
 
+        Log.i("CBL", "Loader Finished");
+
         loading = false;
 
         comicBookListAdapter.addAll(data);
@@ -90,6 +92,7 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
             } else {
                 (getActivity().findViewById(R.id.comic_list_progress)).setVisibility(View.INVISIBLE);
             }
+
             shown = true;
 
         } else {
@@ -124,9 +127,11 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
 
             getLoaderManager().restartLoader(LOADER_ID, null, this);
 
+            Log.i("CBL", "Restarting Loader");
+
             loading = true;
 
-
+/*
             // https://stackoverflow.com/questions/19320214/adding-items-to-listview-maintaining-scroll-position-and-not-seeing-a-scroll-ju
             final int positionToSave = view.getFirstVisiblePosition();
 
@@ -148,6 +153,7 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
                     }
                 }
             });
+            */
         }
     }
 

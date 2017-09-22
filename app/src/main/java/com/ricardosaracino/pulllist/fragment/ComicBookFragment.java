@@ -5,14 +5,11 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import com.ricardosaracino.pulllist.adapter.ComicBookAdapter;
-import com.ricardosaracino.pulllist.adapter.ComicBookListAdapter;
 import com.ricardosaracino.pulllist.datasource.MarvelDataSource;
 import com.ricardosaracino.pulllist.hydrator.ComicBookListJsonHydrator;
 import com.ricardosaracino.pulllist.loader.ComicBookListDataLoader;
 import com.ricardosaracino.pulllist.model.ComicBook;
-import org.apache.http.message.BasicNameValuePair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ComicBookFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<ComicBook>> {

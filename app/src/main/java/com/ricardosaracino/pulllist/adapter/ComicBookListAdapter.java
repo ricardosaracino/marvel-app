@@ -57,7 +57,6 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
 
                     return true;
                 }
-
                 return false;
             }
         });

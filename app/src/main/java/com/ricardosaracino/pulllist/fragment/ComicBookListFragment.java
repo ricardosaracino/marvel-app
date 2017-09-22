@@ -26,16 +26,11 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
     private ComicBookListAdapter comicBookListAdapter;
 
     private boolean loading = true;
-    private boolean shown = false;
 
     private int count;
-    private int limit;
     private int offset = 1000;
-    private int total;
-
 
     private int previousTotal;
-
 
     private int visibleThreshold = 5;
 
@@ -73,8 +68,6 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
     @Override
     public void onLoadFinished(final Loader<List<ComicBook>> loader, List<ComicBook> data) {
 
-        Log.i("CBL", "Loader Finished");
-
         loading = false;
 
         comicBookListAdapter.addAll(data);
@@ -82,18 +75,13 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
         MarvelDataSource marvelDataSource = (MarvelDataSource) ((ComicBookListDataLoader) loader).getDataSource();
 
         count = marvelDataSource.getResultCount();
-        limit = marvelDataSource.getResultLimit();
         offset = marvelDataSource.getResultOffset();
-        total = marvelDataSource.getResultTotal();
 
         if (isResumed()) {
-            if (!shown) {
-                setListShown(true);
-            } else {
-                (getActivity().findViewById(R.id.comic_list_progress)).setVisibility(View.INVISIBLE);
-            }
 
-            shown = true;
+            setListShown(true);
+
+            (getActivity().findViewById(R.id.comic_list_progress)).setVisibility(View.INVISIBLE);
 
         } else {
             setListShownNoAnimation(true);
@@ -121,45 +109,18 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
                 previousTotal = totalItemCount;
             }
         }
+
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+
+            loading = true;
 
             (getActivity().findViewById(R.id.comic_list_progress)).setVisibility(View.VISIBLE);
 
             getLoaderManager().restartLoader(LOADER_ID, null, this);
-
-            Log.i("CBL", "Restarting Loader");
-
-            loading = true;
-
-/*
-            // https://stackoverflow.com/questions/19320214/adding-items-to-listview-maintaining-scroll-position-and-not-seeing-a-scroll-ju
-            final int positionToSave = view.getFirstVisiblePosition();
-
-            view.post(new Runnable() {
-                @Override
-                public void run() {
-                    view.setSelection(positionToSave);
-                }
-            });
-
-            view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    if (view.getFirstVisiblePosition() == positionToSave) {
-                        view.getViewTreeObserver().removeOnPreDrawListener(this);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-            */
         }
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
-
-
 }

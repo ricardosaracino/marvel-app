@@ -9,7 +9,7 @@ public class ComicBookActivity extends AppCompatActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_comic);
-        
+
         //int comicId = getIntent().getExtras().getInt("comic_id");
     }
 }

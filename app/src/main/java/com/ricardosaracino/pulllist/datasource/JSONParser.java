@@ -1,98 +1,90 @@
 package com.ricardosaracino.pulllist.datasource;
 
-import android.util.Log;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
+
+import static java.net.HttpURLConnection.HTTP_OK;
 
 
 public class JSONParser {
 
-    static InputStream is = null;
-    static JSONObject json = null;
-    static String outPut = "";
+    private String encoding;
+    private String requestMethod;
 
-    // constructor
+
     public JSONParser() {
-
+        this("UTF-8", "GET");
     }
 
-    public JSONObject getJSONFromUrl(String url, List<NameValuePair> params) throws JSONParserException, HttpStatusException {
 
-        // Making the HTTP request
+    public JSONParser(String encoding, String requestMethod) {
+        this.encoding = encoding;
+        this.requestMethod = requestMethod;
+    }
+
+
+    public JSONObject getJSONFromUrl(String urlString, List<NameValuePair> params) throws HttpStatusException, IOException, URISyntaxException, JSONException {
+
+
+        URIBuilder uriBuilder = new URIBuilder(urlString);
+
+        uriBuilder.addParameters(params);
+
+        URL url = new URL(uriBuilder.build().toString());
+
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+        urlConnection.setRequestMethod(requestMethod);
+
+        urlConnection.setConnectTimeout(1500);
+        urlConnection.setReadTimeout(1500);
+
+        JSONObject json;
+
         try {
 
-            DefaultHttpClient httpClient = new DefaultHttpClient();
+            InputStream in = urlConnection.getInputStream();
 
-
-            // post data
-            /*HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new UrlEncodedFormEntity(params));
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-*/
-
-            HttpGet request = new HttpGet();
-
-            URIBuilder uriBuilder = new URIBuilder(url);
-
-            uriBuilder.addParameters(params);
-
-            request.setURI(uriBuilder.build());
-
-
-            HttpResponse httpResponse = httpClient.execute(request);
-
-            if (httpResponse.getStatusLine().getStatusCode() != 200) {
-                throw new HttpStatusException("Error Status Code", httpResponse.getStatusLine().getStatusCode());
+            if (urlConnection.getResponseCode() != HTTP_OK) {
+                throw new HttpStatusException("", urlConnection.getResponseCode());
             }
 
+            InputStream bin = new BufferedInputStream(in);
 
-            HttpEntity httpEntity = httpResponse.getEntity();
+            String jsonString = readStream(bin);
 
-            is = httpEntity.getContent();
+            json = new JSONObject(jsonString);
 
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
         }
 
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = in.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            is.close();
-            outPut = sb.toString();
-            Log.e("JSON", outPut);
-        } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
-        }
-
-        try {
-            json = new JSONObject(outPut);
-        } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
-        }
-
-        // return JSON String
         return json;
+    }
+
+
+    private String readStream(InputStream is) throws IOException {
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(is, this.encoding), 8);
+
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+
+        while ((line = in.readLine()) != null) {
+            sb.append(line + "\n");
+        }
+
+        is.close();
+
+        return sb.toString();
     }
 }

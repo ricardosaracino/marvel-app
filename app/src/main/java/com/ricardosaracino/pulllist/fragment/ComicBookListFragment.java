@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import com.ricardosaracino.pulllist.R;
@@ -13,9 +12,7 @@ import com.ricardosaracino.pulllist.datasource.MarvelDataSource;
 import com.ricardosaracino.pulllist.hydrator.ComicBookListJsonHydrator;
 import com.ricardosaracino.pulllist.loader.ComicBookListDataLoader;
 import com.ricardosaracino.pulllist.model.ComicBook;
-import org.apache.http.message.BasicNameValuePair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,9 +23,10 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
     private ComicBookListAdapter comicBookListAdapter;
 
     private boolean loading = true;
+    private boolean shown = false;
 
     private int count;
-    private int offset = 1000;
+    private int offset = 0;
 
     private int previousTotal;
 
@@ -42,9 +40,8 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
 
         comicBookListAdapter = new ComicBookListAdapter(getActivity());
 
-        setEmptyText("No data, please add from menu.");
+        setEmptyText("No data");
 
-        getListView().setOnScrollListener(this);
 
         setListAdapter(comicBookListAdapter);
 
@@ -56,11 +53,13 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
     @Override
     public Loader<List<ComicBook>> onCreateLoader(int id, Bundle args) {
 
-        ArrayList params = new ArrayList<BasicNameValuePair>();
+        MarvelDataSource marvelDataSource = new MarvelDataSource(new ComicBookListJsonHydrator(), "/v1/public/comics");
 
-        params.add(new BasicNameValuePair("offset", String.valueOf(offset + count)));
+        marvelDataSource.addIntParam("offset", offset + count);
 
-        MarvelDataSource marvelDataSource = new MarvelDataSource(new ComicBookListJsonHydrator(), "/v1/public/comics", params);
+        marvelDataSource.addIntParam("startYear", 2017);
+
+        marvelDataSource.addStringParam("orderBy", "onsaleDate");
 
         return new ComicBookListDataLoader(getActivity(), marvelDataSource);
     }
@@ -77,9 +76,17 @@ public class ComicBookListFragment extends ListFragment implements AbsListView.O
         count = marvelDataSource.getResultCount();
         offset = marvelDataSource.getResultOffset();
 
-        if (isResumed()) {
 
-            setListShown(true);
+        if (count > 0) {
+            getListView().setOnScrollListener(this);
+        }
+
+
+        if (isResumed()) {
+            if (!shown) {
+                setListShown(true);
+                shown = true;
+            }
 
             (getActivity().findViewById(R.id.comic_list_progress)).setVisibility(View.INVISIBLE);
 

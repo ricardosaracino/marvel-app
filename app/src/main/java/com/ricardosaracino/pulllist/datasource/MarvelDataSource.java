@@ -16,6 +16,7 @@ public class MarvelDataSource<T> extends AbstractDataSource {
 
     private static final String PRIVATE_API_KEY = "cdd305574f7626a3554062099082edeedb28c200";
     private static final String PUBLIC_API_KEY = "39754936249867122be92159703640da";
+    // java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.
     private static final String API_BASE_URL = "https://gateway.marvel.com:443";
     protected String url;
     protected List<NameValuePair> params;
@@ -33,7 +34,7 @@ public class MarvelDataSource<T> extends AbstractDataSource {
         this(hydrator, apiCall, new ArrayList<BasicNameValuePair>());
     }
 
-    public MarvelDataSource(AbstractHydrator hydrator, String apiCall, List params) {
+    private MarvelDataSource(AbstractHydrator hydrator, String apiCall, List params) {
 
 
         this.jsonParser = new JSONParser();
@@ -99,6 +100,14 @@ public class MarvelDataSource<T> extends AbstractDataSource {
         }
     }
 
+
+    public boolean addStringParam(String k, String v) {
+        return params.add(new BasicNameValuePair(k, v));
+    }
+
+    public boolean addIntParam(String k, int v) {
+        return params.add(new BasicNameValuePair(k, String.valueOf(v)));
+    }
 
     public int getResultOffset() {
         return resultOffset;

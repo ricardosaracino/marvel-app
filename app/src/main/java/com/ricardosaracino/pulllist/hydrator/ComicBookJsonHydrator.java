@@ -24,7 +24,7 @@ public class ComicBookJsonHydrator extends AbstractHydrator<ComicBook, JSONObjec
 
         JSONArray images = jsonObject.getJSONArray("images");
 
-        if(images.length() > 0) {
+        if (images.length() > 0) {
 
             JSONObject image = (JSONObject) images.get(0);
 

@@ -39,7 +39,7 @@ public class ComicBookFragment extends ListFragment implements LoaderManager.Loa
 
         int comicId = getActivity().getIntent().getExtras().getInt("comic_id");
 
-        MarvelDataSource marvelDataSource = new MarvelDataSource(new ComicBookListJsonHydrator(), "/v1/public/comics/"+comicId);
+        MarvelDataSource marvelDataSource = new MarvelDataSource(new ComicBookListJsonHydrator(), "/v1/public/comics/" + comicId);
 
         return new ComicBookListDataLoader(getActivity(), marvelDataSource);
     }

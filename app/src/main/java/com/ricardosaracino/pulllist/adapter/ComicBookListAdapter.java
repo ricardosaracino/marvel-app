@@ -17,7 +17,10 @@ import com.ricardosaracino.pulllist.cache.BitmapLruCache;
 import com.ricardosaracino.pulllist.datasource.BitmapDataSource;
 import com.ricardosaracino.pulllist.model.ComicBook;
 import com.ricardosaracino.pulllist.util.AbstractImageViewHolder;
+import com.ricardosaracino.pulllist.util.AbstractViewHolder;
 import com.ricardosaracino.pulllist.util.ImageViewAsyncTask;
+
+import java.util.UUID;
 
 public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
 
@@ -42,7 +45,10 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
 
         ComicListRowHolder taskViewHolder;
 
+        UUID uuid = UUID.nameUUIDFromBytes((ComicListRowHolder.class.toString()+getItem(position).getId()).getBytes());
+
         if (rowView == null) {
+
             LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             rowView = inflater.inflate(R.layout.comic_list_row, parent, false);
@@ -52,18 +58,30 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
             taskViewHolder.titleView = rowView.findViewById(R.id.title);
             taskViewHolder.descView = rowView.findViewById(R.id.description);
             taskViewHolder.imageView = rowView.findViewById(R.id.image);
-            taskViewHolder.position = position;
 
             rowView.setTag(taskViewHolder);
+
         } else {
+
             taskViewHolder = (ComicListRowHolder) rowView.getTag();
+
+            if(uuid.equals(taskViewHolder.getUUID())) {
+
+                // if the tag has the same uuid as the item just return the current row view
+                // todo why the fuck do i need to do this??
+                return  rowView;
+            }
         }
 
 
         taskViewHolder.titleView.setText(getItem(position).getTitle());
         taskViewHolder.descView.setText(getItem(position).getDescription());
+
         taskViewHolder.imageView.setImageBitmap(bitmapPlaceholder);
         taskViewHolder.position = position;
+
+        taskViewHolder.uuid = uuid;
+
 
 
         if (getItem(position).getImagePath() != null) {
@@ -71,7 +89,7 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
             //https://developer.marvel.com/documentation/images
             String url = getItem(position).getImagePath() + "/standard_medium.jpg";
 
-            new ImageViewAsyncTask(position, new BitmapDataSource(url), bitmapLruCache, url).execute(taskViewHolder);
+            new ImageViewAsyncTask(position, new BitmapDataSource(url), bitmapLruCache, getItem(position).getImagePath() + "/standard_medium.jpg").execute(taskViewHolder);
         }
 
         rowView.setOnTouchListener(new View.OnTouchListener() {
@@ -101,12 +119,15 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
         return rowView;
     }
 
-    private static class ComicListRowHolder implements AbstractImageViewHolder {
+    private static class ComicListRowHolder implements AbstractImageViewHolder, AbstractViewHolder {
 
         TextView titleView;
         TextView descView;
+
         ImageView imageView;
         int position;
+
+        UUID uuid;
 
         @Override
         public ImageView getImageView() {
@@ -116,6 +137,11 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
         @Override
         public int getPosition() {
             return position;
+        }
+
+        @Override
+        public UUID getUUID() {
+            return uuid;
         }
     }
 }

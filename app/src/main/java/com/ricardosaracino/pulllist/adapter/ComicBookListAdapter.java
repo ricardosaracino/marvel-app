@@ -16,9 +16,9 @@ import com.ricardosaracino.pulllist.activity.ComicBookActivity;
 import com.ricardosaracino.pulllist.cache.BitmapLruCache;
 import com.ricardosaracino.pulllist.datasource.BitmapDataSource;
 import com.ricardosaracino.pulllist.model.ComicBook;
-import com.ricardosaracino.pulllist.util.AbstractImageViewHolder;
-import com.ricardosaracino.pulllist.util.AbstractViewHolder;
-import com.ricardosaracino.pulllist.util.ImageViewAsyncTask;
+import com.ricardosaracino.pulllist.task.ImageViewAsyncTask;
+import com.ricardosaracino.pulllist.viewholder.AbstractImageViewHolder;
+import com.ricardosaracino.pulllist.viewholder.AbstractViewHolder;
 
 import java.util.UUID;
 
@@ -45,7 +45,7 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
 
         ComicListRowHolder taskViewHolder;
 
-        UUID uuid = UUID.nameUUIDFromBytes((ComicListRowHolder.class.toString()+getItem(position).getId()).getBytes());
+        UUID uuid = UUID.nameUUIDFromBytes((ComicListRowHolder.class.toString() + getItem(position).getId()).getBytes());
 
         if (rowView == null) {
 
@@ -65,11 +65,11 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
 
             taskViewHolder = (ComicListRowHolder) rowView.getTag();
 
-            if(uuid.equals(taskViewHolder.getUUID())) {
+            if (uuid.equals(taskViewHolder.getUUID())) {
 
                 // if the tag has the same uuid as the item just return the current row view
                 // todo why the fuck do i need to do this??
-                return  rowView;
+                return rowView;
             }
         }
 
@@ -83,13 +83,12 @@ public class ComicBookListAdapter extends ArrayAdapter<ComicBook> {
         taskViewHolder.uuid = uuid;
 
 
-
         if (getItem(position).getImagePath() != null) {
 
             //https://developer.marvel.com/documentation/images
             String url = getItem(position).getImagePath() + "/standard_medium.jpg";
 
-            new ImageViewAsyncTask(position, new BitmapDataSource(url), bitmapLruCache, getItem(position).getImagePath() + "/standard_medium.jpg").execute(taskViewHolder);
+            new ImageViewAsyncTask(position, new BitmapDataSource(url), bitmapLruCache, url).execute(taskViewHolder);
         }
 
         rowView.setOnTouchListener(new View.OnTouchListener() {

@@ -6,8 +6,9 @@ import com.ricardosaracino.pulllist.R;
 
 public class ComicBookListActivity extends AppCompatActivity {
 
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comiclist);
     }
 }

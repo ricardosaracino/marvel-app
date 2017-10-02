@@ -1,4 +1,4 @@
-package com.ricardosaracino.pulllist.util;
+package com.ricardosaracino.pulllist.task;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import com.ricardosaracino.pulllist.cache.ImageCache;
 import com.ricardosaracino.pulllist.datasource.AbstractDataSource;
+import com.ricardosaracino.pulllist.viewholder.AbstractImageViewHolder;
 
 
 //https://developer.android.com/training/improving-layouts/smooth-scrolling.html#AsyncTask

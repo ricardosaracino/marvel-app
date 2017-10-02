@@ -11,11 +11,8 @@ import com.ricardosaracino.pulllist.R;
 import com.ricardosaracino.pulllist.cache.BitmapFileCache;
 import com.ricardosaracino.pulllist.datasource.BitmapDataSource;
 import com.ricardosaracino.pulllist.model.ComicBook;
-import com.ricardosaracino.pulllist.util.AbstractImageViewHolder;
-import com.ricardosaracino.pulllist.util.AbstractViewHolder;
-import com.ricardosaracino.pulllist.util.ImageViewAsyncTask;
-
-import java.util.UUID;
+import com.ricardosaracino.pulllist.task.ImageViewAsyncTask;
+import com.ricardosaracino.pulllist.viewholder.AbstractImageViewHolder;
 
 public class ComicBookAdapter extends ArrayAdapter<ComicBook> {
 
@@ -67,13 +64,12 @@ public class ComicBookAdapter extends ArrayAdapter<ComicBook> {
         return rowView;
     }
 
-    private static class ComicDetailHolder implements AbstractImageViewHolder, AbstractViewHolder {
+    private static class ComicDetailHolder implements AbstractImageViewHolder {
 
         TextView titleView;
         TextView descView;
         ImageView imageView;
         int position;
-        UUID uuid;
 
         @Override
         public ImageView getImageView() {
@@ -83,11 +79,6 @@ public class ComicBookAdapter extends ArrayAdapter<ComicBook> {
         @Override
         public int getPosition() {
             return position;
-        }
-
-        @Override
-        public UUID getUUID() {
-            return uuid;
         }
     }
 }

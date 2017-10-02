@@ -1,4 +1,4 @@
-package com.ricardosaracino.pulllist.util;
+package com.ricardosaracino.pulllist.viewholder;
 
 import java.util.UUID;
 

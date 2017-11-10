@@ -12,12 +12,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarvelDataSource<T> extends AbstractDataSource {
+public class MarvelDataSource<T> implements DataSourceReader {
 
     private static final String PRIVATE_API_KEY = "cdd305574f7626a3554062099082edeedb28c200";
     private static final String PUBLIC_API_KEY = "39754936249867122be92159703640da";
-    // java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.
     private static final String API_BASE_URL = "https://gateway.marvel.com:443";
+
     protected String url;
     protected List<NameValuePair> params;
     private int resultOffset;
@@ -36,15 +36,12 @@ public class MarvelDataSource<T> extends AbstractDataSource {
 
     private MarvelDataSource(AbstractHydrator hydrator, String apiCall, List params) {
 
-
         this.jsonParser = new JSONParser();
-
 
         this.hydrator = hydrator;
 
         this.url = API_BASE_URL + apiCall;
-
-
+        
         String timestamp = String.valueOf(System.currentTimeMillis());
 
         params.add(new BasicNameValuePair("ts", timestamp));
@@ -54,7 +51,6 @@ public class MarvelDataSource<T> extends AbstractDataSource {
         params.add(new BasicNameValuePair("hash", generateHash(timestamp, PUBLIC_API_KEY, PRIVATE_API_KEY)));
 
         this.params = params;
-
     }
 
 
@@ -71,7 +67,7 @@ public class MarvelDataSource<T> extends AbstractDataSource {
             return md5.toString();
         } catch (NoSuchAlgorithmException e) {
 
-            Log.e("asdfasdf", "asdfsadfsadf");
+            Log.e("MarvelDataSource", e.getMessage());
 
             //throw new MarvelApiException("cannot generate the api key", e);
         }

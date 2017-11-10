@@ -16,12 +16,12 @@ public class ComicBook implements Parcelable {
     };
     private int id;
     private int digitalId;
-    private String title;
+    private String title = "";
     private int issueNumber;
-    private String variantDescription;
-    private String description;
-    private String format;
-    private String imagePath;
+    private String variantDescription = "";
+    private String description = "";
+    private String format = "";
+    private String imagePath = "";
 
     public ComicBook() {
     }

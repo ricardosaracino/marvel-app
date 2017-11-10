@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import com.ricardosaracino.pulllist.cache.ImageCache;
-import com.ricardosaracino.pulllist.datasource.AbstractDataSource;
+import com.ricardosaracino.pulllist.datasource.DataSourceReader;
 import com.ricardosaracino.pulllist.viewholder.AbstractImageViewHolder;
 
 
@@ -14,7 +14,7 @@ import com.ricardosaracino.pulllist.viewholder.AbstractImageViewHolder;
 //https://www.itworld.com/article/2705632/development/how-to-make-smooth-scrolling-listviews-in-android.html
 public class ImageViewAsyncTask extends AsyncTask<AbstractImageViewHolder, Void, Bitmap> {
 
-    private final AbstractDataSource<Bitmap> dataSource;
+    private final DataSourceReader<Bitmap> dataSource;
 
     private final String cacheKey;
 
@@ -25,7 +25,7 @@ public class ImageViewAsyncTask extends AsyncTask<AbstractImageViewHolder, Void,
     private AbstractImageViewHolder viewHolder;
 
 
-    public ImageViewAsyncTask(int position, AbstractDataSource<Bitmap> dataSource, ImageCache bitmapLruCache, String cacheKey) {
+    public ImageViewAsyncTask(int position, DataSourceReader<Bitmap> dataSource, ImageCache bitmapLruCache, String cacheKey) {
 
         this.position = position;
 

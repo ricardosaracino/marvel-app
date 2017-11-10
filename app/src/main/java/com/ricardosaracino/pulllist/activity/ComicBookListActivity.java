@@ -1,14 +1,11 @@
 package com.ricardosaracino.pulllist.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import com.ricardosaracino.pulllist.R;
 
-public class ComicBookListActivity extends AppCompatActivity {
+public class ComicBookListActivity extends ComicBookBaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void createContentView() {
         setContentView(R.layout.activity_comiclist);
     }
 }

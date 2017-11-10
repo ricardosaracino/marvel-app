@@ -9,7 +9,7 @@ import java.net.URL;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
-public class BitmapDataSource extends AbstractDataSource<Bitmap> {
+public class BitmapDataSource implements DataSourceReader<Bitmap> {
 
     private String url;
 
@@ -43,5 +43,20 @@ public class BitmapDataSource extends AbstractDataSource<Bitmap> {
         }
 
         return null;
+    }
+
+    @Override
+    public int getResultCount() {
+        return 0;
+    }
+
+    @Override
+    public int getResultOffset() {
+        return 0;
+    }
+
+    @Override
+    public int getResultTotal() {
+        return 0;
     }
 }

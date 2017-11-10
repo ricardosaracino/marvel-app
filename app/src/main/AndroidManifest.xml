@@ -25,6 +25,8 @@
         </provider>
 
 
+
+
         <activity android:name=".activity.ComicBookListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -32,8 +34,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.ComicBookActivity">
-        </activity>
-    </application>
+        <activity android:name=".activity.ComicBookActivity"/>
 
+        <activity android:name=".activity.ComicBookFavoriteListActivity"/>
+
+        <activity android:name=".activity.ComicBookSearchListActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
+        
+    </application>
 </manifest>

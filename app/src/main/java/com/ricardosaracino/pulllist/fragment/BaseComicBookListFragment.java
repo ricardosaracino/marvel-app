@@ -16,7 +16,7 @@ import java.util.List;
 
 public abstract class BaseComicBookListFragment extends ListFragment implements AbsListView.OnScrollListener, LoaderManager.LoaderCallbacks<List<ComicBook>> {
 
-    private static final int LOADER_ID = 1;
+    protected static final int LOADER_ID = 1;
 
     private static final int visibleThreshold = 1;
     protected int count = 0;

@@ -9,7 +9,9 @@ import com.ricardosaracino.pulllist.model.ComicBook;
 
 import java.util.List;
 
-
+/*
+    todo remove
+ */
 public class ComicBookListFragment extends BaseComicBookListFragment {
 
     @Override

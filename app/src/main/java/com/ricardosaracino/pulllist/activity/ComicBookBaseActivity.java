@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import com.ricardosaracino.pulllist.R;
 
+/*
+todo remove
+ */
 public abstract class ComicBookBaseActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
 
     protected static final int TAB_LIST = 0;

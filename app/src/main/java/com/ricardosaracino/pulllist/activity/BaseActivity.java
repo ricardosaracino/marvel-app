@@ -11,7 +11,7 @@ import com.ricardosaracino.pulllist.R;
 
 /*
 http://hmkcode.com/material-design-app-android-design-support-library-appcompat/
- */
+*/
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected DrawerLayout drawerLayout;

@@ -11,45 +11,22 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-                android:id="@+id/appbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true">
-
-            <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    android:background="?attr/colorPrimary"/>
-
-            <android.support.design.widget.TabLayout
-                    android:id="@+id/tabLayout"
-                    android:scrollbars="horizontal"
-                    android:layout_below="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/colorPrimary"
-                    app:layout_scrollFlags="scroll|enterAlways" />
-
-        </android.support.design.widget.AppBarLayout>
-
+        <include
+                android:id="@+id/week_appbar"
+                layout="@layout/comic_week_appbar"/>
 
         <RelativeLayout
+                android:id="@+id/comic_list_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <fragment
-                    class="com.ricardosaracino.pulllist.fragment.ComicBookFavoriteListFragment"
-
+                    class="com.ricardosaracino.pulllist.fragment.ComicBookWeekPreviousListFragment"
                     android:id="@+id/comic_list_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
-
         </RelativeLayout>
-        
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView

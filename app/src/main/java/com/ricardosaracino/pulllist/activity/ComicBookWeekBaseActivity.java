@@ -3,14 +3,16 @@ package com.ricardosaracino.pulllist.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+
 import com.ricardosaracino.pulllist.R;
 
-public abstract class ComicBookWeeklyBaseActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
+public abstract class ComicBookWeekBaseActivity extends ComicBookBaseActivity implements TabLayout.OnTabSelectedListener {
 
     protected static final int TAB_PREVIOUS = 0;
     protected static final int TAB_CURRENT = 1;
     protected static final int TAB_NEXT = 2;
     protected TabLayout tabLayout;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,9 +26,9 @@ public abstract class ComicBookWeeklyBaseActivity extends BaseActivity implement
         if (tabLayout != null) {
             tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-            tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_list_hd), TAB_PREVIOUS, this instanceof this);
-            tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_search_hd), TAB_CURRENT, this instanceof this);
-            tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_favorite_hd), TAB_NEXT, this instanceof this);
+            tabLayout.addTab(tabLayout.newTab().setText("Previous"), TAB_PREVIOUS, this instanceof ComicBookWeekPreviousListActivity);
+            tabLayout.addTab(tabLayout.newTab().setText("Current"), TAB_CURRENT, this instanceof ComicBookWeekCurrentListActivity);
+            tabLayout.addTab(tabLayout.newTab().setText("Next"), TAB_NEXT, this instanceof ComicBookWeekNextListActivity);
 
             tabLayout.addOnTabSelectedListener(this);
         }
@@ -44,15 +46,15 @@ public abstract class ComicBookWeeklyBaseActivity extends BaseActivity implement
     public void onTabSelected(TabLayout.Tab tab) {
         switch (tab.getPosition()) {
             case TAB_PREVIOUS:
-                startActivity(new Intent(ComicBookWeeklyBaseActivity.this, ComicBookListActivity.class));
+                startActivity(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekPreviousListActivity.class));
                 break;
 
             case TAB_CURRENT:
-                startActivity(new Intent(ComicBookWeeklyBaseActivity.this, ComicBookSearchListActivity.class));
+                startActivity(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekCurrentListActivity.class));
                 break;
 
             case TAB_NEXT:
-                this.startActivity(new Intent(ComicBookWeeklyBaseActivity.this, ComicBookFavoriteListActivity.class));
+                this.startActivity(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekNextListActivity.class));
                 break;
         }
     }

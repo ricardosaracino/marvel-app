@@ -22,13 +22,11 @@ public class ComicBookSearchListFragment extends BaseComicBookListFragment imple
 
         marvelDataSource.addIntParam("offset", offset + count);
 
-        marvelDataSource.addIntParam("startYear", 2017);
-
-        marvelDataSource.addStringParam("formatType", "comic");
+        marvelDataSource.addStringParam("format", "comic");
 
         marvelDataSource.addStringParam("titleStartsWith", query);
 
-        marvelDataSource.addStringParam("orderBy", "onsaleDate");
+        marvelDataSource.addStringParam("orderBy", "-onsaleDate");
 
         return new ComicBookListDataLoader(getActivity(), marvelDataSource);
     }

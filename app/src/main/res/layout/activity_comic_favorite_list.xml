@@ -22,42 +22,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    android:background="?attr/colorPrimary">
-                <android.support.v7.widget.SearchView
+                    android:background="?attr/colorPrimary"/>
 
-                        app:actionViewClass="android.support.v7.widget.SearchView"
-
-                        android:id="@+id/comic_search"
-                        android:icon="@drawable/ic_search_hd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:iconifiedByDefault="true"
-                        android:queryHint="@string/str_comics"/>
-            </android.support.v7.widget.Toolbar>
-
-            <android.support.design.widget.TabLayout
-                    android:id="@+id/tabLayout"
-                    android:scrollbars="horizontal"
-                    android:layout_below="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/colorPrimary"
-                    app:layout_scrollFlags="scroll|enterAlways"/>
         </android.support.design.widget.AppBarLayout>
 
+
         <RelativeLayout
-                android:id="@+id/comic_list_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
             <fragment
-                    class="com.ricardosaracino.pulllist.fragment.ComicBookSearchListFragment"
+                    class="com.ricardosaracino.pulllist.fragment.ComicBookFavoriteListFragment"
+
                     android:id="@+id/comic_list_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
+
         </RelativeLayout>
+        
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView

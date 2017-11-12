@@ -47,14 +47,12 @@ public class ComicBookWeekCurrentListFragment extends BaseComicBookListFragment 
             }
         }
 
-
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String startDate = "", endDate = "";
+        String startDate, endDate;
 
         startDate = df.format(c.getTime());
         c.add(Calendar.DATE, 6);
         endDate = df.format(c.getTime());
-
 
         MarvelDataSource marvelDataSource = new MarvelDataSource(new ComicBookListJsonHydrator(), "/v1/public/comics");
 
@@ -62,11 +60,9 @@ public class ComicBookWeekCurrentListFragment extends BaseComicBookListFragment 
 
         marvelDataSource.addStringParam("dateRange", startDate+","+endDate);
 
-        marvelDataSource.addStringParam("formatType", "comic");
-
         marvelDataSource.addStringParam("format", "comic");
 
-        marvelDataSource.addStringParam("orderBy", "onsaleDate");
+        marvelDataSource.addStringParam("orderBy", "title");
 
         return new ComicBookListDataLoader(getActivity(), marvelDataSource);
     }

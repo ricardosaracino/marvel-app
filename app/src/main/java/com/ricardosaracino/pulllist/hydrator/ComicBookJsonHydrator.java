@@ -1,5 +1,6 @@
 package com.ricardosaracino.pulllist.hydrator;
 
+import android.text.Html;
 import com.ricardosaracino.pulllist.model.ComicBook;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,7 +21,7 @@ public class ComicBookJsonHydrator extends AbstractHydrator<ComicBook, JSONObjec
 
         comicBook.setVariantDescription(jsonObject.getString("variantDescription"));
 
-        comicBook.setDescription(jsonObject.isNull("description") ? "" : jsonObject.getString("description"));
+        comicBook.setDescription(jsonObject.isNull("description") ? "" : Html.fromHtml(jsonObject.getString("description")).toString());
 
         JSONArray images = jsonObject.getJSONArray("images");
 

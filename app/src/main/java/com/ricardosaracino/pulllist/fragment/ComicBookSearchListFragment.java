@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import com.ricardosaracino.pulllist.R;
+import com.ricardosaracino.pulllist.adapter.ComicBookListAdapter;
 import com.ricardosaracino.pulllist.datasource.MarvelDataSource;
 import com.ricardosaracino.pulllist.hydrator.ComicBookListJsonHydrator;
 import com.ricardosaracino.pulllist.loader.ComicBookListDataLoader;
@@ -14,6 +15,14 @@ import java.util.List;
 public class ComicBookSearchListFragment extends BaseComicBookListFragment implements SearchView.OnQueryTextListener {
 
     private String query;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+
+        shown = true;
+        
+        super.onActivityCreated(savedInstanceState);
+    }
 
     @Override
     public Loader<List<ComicBook>> onCreateLoader(int id, Bundle args) {
@@ -31,7 +40,6 @@ public class ComicBookSearchListFragment extends BaseComicBookListFragment imple
         return new ComicBookListDataLoader(getActivity(), marvelDataSource);
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -46,6 +54,8 @@ public class ComicBookSearchListFragment extends BaseComicBookListFragment imple
 
         query = s;
 
+        showProgress(true);
+
         loading = true;
 
         getLoaderManager().restartLoader(LOADER_ID, null, this);
@@ -53,6 +63,7 @@ public class ComicBookSearchListFragment extends BaseComicBookListFragment imple
         SearchView searchView = getActivity().findViewById(R.id.comic_search);
 
         searchView.clearFocus();
+
 
         return true;
     }

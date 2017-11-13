@@ -5,7 +5,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ProgressBar;
+import com.ricardosaracino.pulllist.R;
 import com.ricardosaracino.pulllist.adapter.ComicBookListAdapter;
 import com.ricardosaracino.pulllist.datasource.DataSourceReader;
 import com.ricardosaracino.pulllist.loader.ComicBookListDataLoader;
@@ -18,14 +21,16 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
     protected static final int LOADER_ID = 1;
 
+    private int previousTotalItemCount = 0;
     private static final int visibleThreshold = 1;
+
     protected int count = 0;
     protected int offset = 0;
     protected int total = 0;
-    private ComicBookListAdapter comicBookListAdapter;
-    private boolean shown = false;
+    protected boolean shown = false;
     protected boolean loading = true;
-    private int previousTotalItemCount = 0;
+
+    protected ComicBookListAdapter comicBookListAdapter;
 
     private ArrayList<ComicBook> list = new ArrayList<>();
 
@@ -45,13 +50,12 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
         onRestoreInstanceState(savedInstanceState);
 
-        setEmptyText("No data");
-
         setListAdapter(comicBookListAdapter);
 
-
         if (!shown) {
-            setListShown(false);
+
+            //setListShown(false);
+            showProgress(true);
 
             getLoaderManager().initLoader(LOADER_ID, null, this);   // calls onCreateLoader
         }
@@ -78,15 +82,16 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
         if (isResumed()) {
             if (!shown) {
-                setListShown(true);
+                //setListShown(true);
                 shown = true;
             }
 
-            //todo
-            //(getActivity().findViewById(R.id.comic_list_progress)).setVisibility(View.INVISIBLE);
+            showProgress(false);
+
+            setEmptyText("No Results");
 
         } else {
-            setListShownNoAnimation(true);
+            //setListShownNoAnimation(true);
         }
     }
 
@@ -104,8 +109,7 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
         if ((offset + count) >= total) {
             return;
         }
-
-
+        
         if (loading) {
             if (totalItemCount > previousTotalItemCount) {
                 loading = false;
@@ -117,8 +121,7 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
             loading = true;
 
-            // todo
-            //(getActivity().findViewById(R.id.comic_list_progress)).setVisibility(View.VISIBLE);
+            showProgress(true);
 
             getLoaderManager().restartLoader(LOADER_ID, null, this);
         }
@@ -174,4 +177,23 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
         super.onSaveInstanceState(outState);
     }
+
+
+    public void showProgress(boolean visible)
+    {
+        ProgressBar progressBar = getActivity().findViewById(R.id.progressbar);
+
+        if(progressBar != null){
+
+            if(visible) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+
 }

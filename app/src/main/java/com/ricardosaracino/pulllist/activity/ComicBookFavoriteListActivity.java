@@ -1,20 +1,24 @@
 package com.ricardosaracino.pulllist.activity;
 
+import android.os.Bundle;
 import android.view.Menu;
 import com.ricardosaracino.pulllist.R;
 
-public class ComicBookFavoriteListActivity extends BaseActivity {
+public class ComicBookFavoriteListActivity extends ComicBookBaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setTitle("Favorites");
+    }
 
     @Override
     public void createContentView() {
         setContentView(R.layout.activity_comic_favorite_list);
-
-        setTitle("Comics");
     }
 
-    // Menu icons are inflated just as they were with actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
+        return true; // no menu
     }
 }

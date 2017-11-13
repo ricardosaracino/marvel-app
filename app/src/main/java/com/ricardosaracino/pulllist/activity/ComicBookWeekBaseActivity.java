@@ -3,7 +3,6 @@ package com.ricardosaracino.pulllist.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-
 import com.ricardosaracino.pulllist.R;
 
 public abstract class ComicBookWeekBaseActivity extends ComicBookBaseActivity implements TabLayout.OnTabSelectedListener {
@@ -46,26 +45,29 @@ public abstract class ComicBookWeekBaseActivity extends ComicBookBaseActivity im
     public void onTabSelected(TabLayout.Tab tab) {
         //https://stackoverflow.com/questions/5151591/android-left-to-right-slide-animation
 
+        // todo https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group
         switch (tab.getPosition()) {
 
             case TAB_PREVIOUS:
                 startActivityForResult(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekPreviousListActivity.class), 500);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                finish();
                 break;
 
             case TAB_CURRENT:
                 startActivityForResult(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekCurrentListActivity.class), 500);
-                if(this instanceof ComicBookWeekNextListActivity){
+                if (this instanceof ComicBookWeekNextListActivity) {
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                }
-                else {
+                } else {
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
+                finish();
                 break;
 
             case TAB_NEXT:
                 startActivityForResult(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekNextListActivity.class), 500);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
                 break;
         }
     }

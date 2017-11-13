@@ -1,12 +1,11 @@
-<menu
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-            android:id="@+id/comic_search"
-            android:icon="@drawable/ic_search_hd"
+            android:id="@+id/comic_week_current"
+            android:icon="@drawable/ic_list_hd"
             app:showAsAction="ifRoom"
-            android:title="Search">
+            android:title="Current">
     </item>
 
     <item

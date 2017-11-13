@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/comic_search"
+            android:icon="@drawable/ic_search_hd"
+            app:showAsAction="ifRoom"
+            android:title="Search">
+    </item>
+
+    <item
+            android:id="@+id/comic_favorite"
+            android:icon="@drawable/ic_favorite_border_hd"
+            app:showAsAction="ifRoom"
+            android:title="Favorite">
+    </item>
+</menu>

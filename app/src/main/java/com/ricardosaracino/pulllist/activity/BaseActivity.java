@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import com.ricardosaracino.pulllist.R;
 
 /*
@@ -30,20 +29,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         createNavigationView();
 
         createToolBarView();
-
-        setTitle("Comics");
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
-
-
-
-
 
     public abstract void createContentView();
 
@@ -55,6 +46,15 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(drawerLayout != null) {
+            this.drawerLayout.closeDrawer(GravityCompat.START,false);
         }
     }
 
@@ -91,6 +91,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         switch (item.getItemId()) {
             case R.id.nav_comics:
                 this.startActivity(new Intent(BaseActivity.this, ComicBookWeekCurrentListActivity.class));
+
+                if(this instanceof ComicBookWeekBaseActivity){
+                    finish();
+                }
+
                 return true;
         }
 

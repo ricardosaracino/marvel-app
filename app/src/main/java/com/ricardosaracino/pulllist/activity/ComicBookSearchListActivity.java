@@ -10,10 +10,8 @@ public class ComicBookSearchListActivity extends ComicBookBaseActivity {
         setContentView(R.layout.activity_comic_search_list);
     }
 
-
-    // Menu icons are inflated just as they were with actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
+        return true; // no menu
     }
 }

@@ -12,8 +12,8 @@
             android:layout_width="match_parent">
 
         <include
-                android:id="@+id/week_appbar"
-                layout="@layout/comic_week_appbar"/>
+                android:id="@+id/appbar"
+                layout="@layout/appbar_comic_week"/>
 
         <RelativeLayout
                 android:id="@+id/comic_list_layout"
@@ -26,6 +26,9 @@
                     android:id="@+id/comic_list_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
+
+            <include layout="@layout/progress"/>
+
         </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 

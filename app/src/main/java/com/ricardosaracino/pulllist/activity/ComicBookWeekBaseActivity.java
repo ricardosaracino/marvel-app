@@ -44,17 +44,28 @@ public abstract class ComicBookWeekBaseActivity extends ComicBookBaseActivity im
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        //https://stackoverflow.com/questions/5151591/android-left-to-right-slide-animation
+
         switch (tab.getPosition()) {
+
             case TAB_PREVIOUS:
-                startActivity(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekPreviousListActivity.class));
+                startActivityForResult(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekPreviousListActivity.class), 500);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
 
             case TAB_CURRENT:
-                startActivity(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekCurrentListActivity.class));
+                startActivityForResult(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekCurrentListActivity.class), 500);
+                if(this instanceof ComicBookWeekNextListActivity){
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                }
+                else {
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                }
                 break;
 
             case TAB_NEXT:
-                this.startActivity(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekNextListActivity.class));
+                startActivityForResult(new Intent(ComicBookWeekBaseActivity.this, ComicBookWeekNextListActivity.class), 500);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
         }
     }

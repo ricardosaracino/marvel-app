@@ -1,16 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="all">
         <item
-                android:id="@+id/navigation_item_1"
+                android:id="@+id/nav_comics"
                 android:icon="@drawable/ic_menu"
                 android:title="Comic Books"/>
         <item
-                android:id="@+id/navigation_item_2"
+                android:id="@+id/nav_characters"
                 android:icon="@drawable/ic_menu"
                 android:title="Characters"/>
 
         <item
-                android:id="@+id/navigation_item_3"
+                android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings_hd"
                 android:title="Settings"/>
     </group>

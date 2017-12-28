@@ -48,3 +48,15 @@ dependencies {
     
     compile 'org.apache.httpcomponents:httpclient-android:4.3.5'
 }
+
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.3.0'
+            }
+        }
+    }
+}

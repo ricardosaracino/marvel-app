@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
@@ -20,10 +21,7 @@ import java.util.List;
 public abstract class BaseComicBookListFragment extends ListFragment implements AbsListView.OnScrollListener, LoaderManager.LoaderCallbacks<List<ComicBook>> {
 
     protected static final int LOADER_ID = 1;
-
-    private int previousTotalItemCount = 0;
     private static final int visibleThreshold = 1;
-
     protected int count = 0;
     protected int offset = 0;
     protected int total = 0;
@@ -31,8 +29,11 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
     protected boolean loading = true;
 
     protected ComicBookListAdapter comicBookListAdapter;
-
+    private int previousTotalItemCount = 0;
     private ArrayList<ComicBook> list = new ArrayList<>();
+
+    // todo onLoadFinished
+    protected int prevOffset = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,13 +47,14 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
         super.onActivityCreated(savedInstanceState);
 
-        comicBookListAdapter = new ComicBookListAdapter(getActivity());
-
-        onRestoreInstanceState(savedInstanceState);
-
-        setListAdapter(comicBookListAdapter);
-
         if (!shown) {
+
+            comicBookListAdapter = new ComicBookListAdapter(getActivity());
+
+            onRestoreInstanceState(savedInstanceState);
+
+            setListAdapter(comicBookListAdapter);
+
 
             //setListShown(false);
             showProgress(true);
@@ -65,20 +67,30 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
     @Override
     public void onLoadFinished(final Loader<List<ComicBook>> loader, List<ComicBook> data) {
 
-        loading = false;
-
-        comicBookListAdapter.addAll(data);
-
         if (comicBookListAdapter.getCount() > 0) {
             getListView().setOnScrollListener(this);
         }
 
         DataSourceReader dataSource = ((ComicBookListDataLoader) loader).getDataSource();
 
-        list.addAll(data);
         count = dataSource.getResultCount();
         offset = dataSource.getResultOffset();
         total = dataSource.getResultTotal();
+
+        // todo ViewPager is calling onLoadFinished with previous data so set finished if list is full
+        if(offset == prevOffset){
+            return;
+        }
+
+        prevOffset = offset;
+        // todo end
+
+        loading = false;
+
+        comicBookListAdapter.addAll(data);
+
+        list.addAll(data);
+
 
         if (isResumed()) {
             if (!shown) {
@@ -99,7 +111,6 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
     public void onLoaderReset(Loader<List<ComicBook>> arg0) {
         comicBookListAdapter.clear();
     }
-
 
     @Override
     public void onScroll(final AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -138,50 +149,52 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
             list = savedInstanceState.getParcelableArrayList("list");
 
-            // make sure not null
-            comicBookListAdapter.clear();
-            comicBookListAdapter.addAll(list);
-            comicBookListAdapter.notifyDataSetChanged();
+            if(list != null) {
 
-            int index = savedInstanceState.getInt("visiblePosition");
-            this.getListView().setSelectionFromTop(index, 0);
+                // make sure not null
+                comicBookListAdapter.clear();
+                comicBookListAdapter.addAll(list);
+                comicBookListAdapter.notifyDataSetChanged();
 
-            shown = savedInstanceState.getBoolean("shown");
-            loading = savedInstanceState.getBoolean("loading");
+                int index = savedInstanceState.getInt("visiblePosition");
+                this.getListView().setSelectionFromTop(index, 0);
 
-            count = savedInstanceState.getInt("count");
-            offset = savedInstanceState.getInt("offset");
-            total = savedInstanceState.getInt("total");
-            previousTotalItemCount = savedInstanceState.getInt("previousTotalItemCount");
+                shown = savedInstanceState.getBoolean("shown");
+                loading = savedInstanceState.getBoolean("loading");
 
-            if (comicBookListAdapter.getCount() > 0) {
-                getListView().setOnScrollListener(this);
+                count = savedInstanceState.getInt("count");
+                offset = savedInstanceState.getInt("offset");
+                total = savedInstanceState.getInt("total");
+                previousTotalItemCount = savedInstanceState.getInt("previousTotalItemCount");
+
+                if (comicBookListAdapter.getCount() > 0) {
+                    getListView().setOnScrollListener(this);
+                }
             }
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putParcelableArrayList("list", list);
+
+        savedInstanceState.putBoolean("shown", shown);
+        savedInstanceState.putBoolean("loading", loading);
+
+        savedInstanceState.putInt("count", count);
+        savedInstanceState.putInt("offset", offset);
+        savedInstanceState.putInt("total", total);
+        savedInstanceState.putInt("previousTotalItemCount", previousTotalItemCount);
 
         if(this.isVisible()) {
-            outState.putParcelableArrayList("list", list);
-
-            outState.putInt("visiblePosition", this.getListView().getFirstVisiblePosition());
-
-            outState.putBoolean("shown", shown);
-            outState.putBoolean("loading", loading);
-
-            outState.putInt("count", count);
-            outState.putInt("offset", offset);
-            outState.putInt("total", total);
-            outState.putInt("previousTotalItemCount", previousTotalItemCount);
+            savedInstanceState.putInt("visiblePosition", this.getListView().getFirstVisiblePosition());
         }
-        
-        super.onSaveInstanceState(outState);
     }
 
-
-    public void showProgress(boolean visible)
+    private void showProgress(boolean visible)
     {
         ProgressBar progressBar = getActivity().findViewById(R.id.progressbar);
 

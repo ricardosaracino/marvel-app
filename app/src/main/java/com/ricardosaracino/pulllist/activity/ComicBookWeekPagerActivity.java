@@ -45,7 +45,6 @@ public class ComicBookWeekPagerActivity extends ComicBookBaseActivity implements
         // When swiping between different sections, select the corresponding tab
         viewPager.addOnPageChangeListener(this);
 
-
         viewPager.setOnScrollChangeListener(this);
     }
 
@@ -109,6 +108,7 @@ public class ComicBookWeekPagerActivity extends ComicBookBaseActivity implements
 
         int position = tab.getPosition();
 
+        // http://bighow.org/42247412-Android_ViewPager___differentiating_between_new_query_and_new_data_for_setCurrentItem___.html
         viewPager.setCurrentItem(position);
     }
 }

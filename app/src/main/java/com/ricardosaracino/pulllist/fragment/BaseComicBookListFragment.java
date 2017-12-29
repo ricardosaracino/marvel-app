@@ -163,18 +163,20 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
-        outState.putParcelableArrayList("list", list);
+        if(this.isVisible()) {
+            outState.putParcelableArrayList("list", list);
 
-        outState.putInt("visiblePosition", this.getListView().getFirstVisiblePosition());
+            outState.putInt("visiblePosition", this.getListView().getFirstVisiblePosition());
 
-        outState.putBoolean("shown", shown);
-        outState.putBoolean("loading", loading);
+            outState.putBoolean("shown", shown);
+            outState.putBoolean("loading", loading);
 
-        outState.putInt("count", count);
-        outState.putInt("offset", offset);
-        outState.putInt("total", total);
-        outState.putInt("previousTotalItemCount", previousTotalItemCount);
-
+            outState.putInt("count", count);
+            outState.putInt("offset", offset);
+            outState.putInt("total", total);
+            outState.putInt("previousTotalItemCount", previousTotalItemCount);
+        }
+        
         super.onSaveInstanceState(outState);
     }
 

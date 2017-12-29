@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ComicBookFavoriteDataSource implements DataSourceReader<List<ComicBook>>, DataSourceWriter<ComicBook> {
 
-    private SQLiteDatabase mDatabase;
+    private Context context;
 
     public static final String TABLE_NAME = "comic_book_favorite";
 
@@ -26,11 +26,9 @@ public class ComicBookFavoriteDataSource implements DataSourceReader<List<ComicB
     int resultTotal = 0;
 
 
-    public ComicBookFavoriteDataSource(Context context) {
+    public ComicBookFavoriteDataSource(Context c) {
 
-        DbHelper mDbHelper = new DbHelper(context);
-
-        mDatabase = mDbHelper.getWritableDatabase();
+        context = c;
     }
 
     @Override
@@ -43,16 +41,19 @@ public class ComicBookFavoriteDataSource implements DataSourceReader<List<ComicB
 
         long id = -1;
 
+        SQLiteDatabase database = new DbHelper(context).getWritableDatabase();
+
         try {
             // insert+delete
-            id = mDatabase.replaceOrThrow(TABLE_NAME, null, generateContentValuesFromObject(comicBook));
+            id = database.replaceOrThrow(TABLE_NAME, null, generateContentValuesFromObject(comicBook));
         } catch (SQLException e) {
             Log.e("ComicBookFav", e.getMessage());
+        } finally {
+            database.close();
         }
 
         return id != -1;
     }
-
 
 
     @Override
@@ -62,10 +63,13 @@ public class ComicBookFavoriteDataSource implements DataSourceReader<List<ComicB
 
         List<ComicBook> comicBookList = new ArrayList<>();
 
-        try {
-            Cursor cursor = mDatabase.query(TABLE_NAME, null, null, null, null, null, null);
+        SQLiteDatabase database = new DbHelper(context).getReadableDatabase();
 
-            if(cursor.moveToFirst()) {
+        try {
+
+            Cursor cursor = database.query(TABLE_NAME, null, null, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
                 do {
                     comicBookList.add(comicBookCursorHydrator.create(cursor));
                 } while (cursor.moveToNext());
@@ -79,6 +83,8 @@ public class ComicBookFavoriteDataSource implements DataSourceReader<List<ComicB
 
         } catch (SQLException e) {
             Log.e("ComicBookFav", e.getMessage());
+        } finally {
+            database.close();
         }
 
         return comicBookList;
@@ -106,10 +112,14 @@ public class ComicBookFavoriteDataSource implements DataSourceReader<List<ComicB
 
         long id = -1;
 
+        SQLiteDatabase database = new DbHelper(context).getWritableDatabase();
+
         try {
-            id = mDatabase.delete(TABLE_NAME, "id=?", new String[]{String.valueOf(comicBook.getId())});
+            id = database.delete(TABLE_NAME, "id=?", new String[]{String.valueOf(comicBook.getId())});
         } catch (SQLException e) {
             Log.e("ComicBookFav", e.getMessage());
+        } finally {
+            database.close();
         }
 
         return id != -1;
@@ -124,9 +134,11 @@ public class ComicBookFavoriteDataSource implements DataSourceReader<List<ComicB
         }
 
         boolean found = false;
+        
+        SQLiteDatabase database = new DbHelper(context).getReadableDatabase();
 
         try {
-            Cursor cursor = mDatabase.query(TABLE_NAME, null, "id=?", new String[]{String.valueOf(comicBook.getId())}, null, null, null);
+            Cursor cursor = database.query(TABLE_NAME, null, "id=?", new String[]{String.valueOf(comicBook.getId())}, null, null, null);
 
             found = cursor.getCount() > 0;
 
@@ -134,6 +146,8 @@ public class ComicBookFavoriteDataSource implements DataSourceReader<List<ComicB
 
         } catch (SQLException e) {
             Log.e("ComicBookFav", e.getMessage());
+        }  finally {
+            database.close();
         }
 
         return found;

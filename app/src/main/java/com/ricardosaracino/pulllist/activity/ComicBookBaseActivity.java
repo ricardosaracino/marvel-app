@@ -20,7 +20,7 @@ public abstract class ComicBookBaseActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if (this instanceof ComicBookWeekBaseActivity) {
+        if (this instanceof ComicBookWeekPagerActivity) {
             getMenuInflater().inflate(R.menu.menu_comic_week, menu);
         } else if (this instanceof ComicBookSearchListActivity) {
             getMenuInflater().inflate(R.menu.menu_comic_search, menu);
@@ -44,7 +44,7 @@ public abstract class ComicBookBaseActivity extends BaseActivity {
                 return true;
 
             case R.id.comic_week_current:
-                this.startActivity(new Intent(ComicBookBaseActivity.this, ComicBookWeekCurrentListActivity.class));
+                this.startActivity(new Intent(ComicBookBaseActivity.this, ComicBookWeekPagerActivity.class));
                 return true;
 
             default:

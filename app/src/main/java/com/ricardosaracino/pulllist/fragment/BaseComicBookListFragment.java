@@ -194,6 +194,4 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
             }
         }
     }
-
-
 }

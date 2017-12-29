@@ -25,17 +25,17 @@
         </provider>
 
 
-        <activity android:name=".activity.ComicBookWeekCurrentListActivity">
+        <activity android:name=".activity.ComicBookWeekPagerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".activity.ComicBookWeekCurrentListActivity"/>
         <activity android:name=".activity.ComicBookWeekNextListActivity"/>
-
         <activity android:name=".activity.ComicBookWeekPreviousListActivity"/>
-
 
 
         <activity android:name=".activity.ComicBookActivity"/>

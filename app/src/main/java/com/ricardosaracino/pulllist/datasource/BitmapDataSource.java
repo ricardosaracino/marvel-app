@@ -19,7 +19,10 @@ public class BitmapDataSource implements DataSourceReader<Bitmap> {
 
     @Override
     public Bitmap read() throws DataSourceException {
+
         HttpURLConnection urlConnection = null;
+        Bitmap bitmap = null;
+
         try {
             URL uri = new URL(url);
             urlConnection = (HttpURLConnection) uri.openConnection();
@@ -30,8 +33,7 @@ public class BitmapDataSource implements DataSourceReader<Bitmap> {
 
             InputStream inputStream = urlConnection.getInputStream();
             if (inputStream != null) {
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                return bitmap;
+                bitmap = BitmapFactory.decodeStream(inputStream);
             }
         } catch (Exception e) {
             urlConnection.disconnect();
@@ -42,7 +44,7 @@ public class BitmapDataSource implements DataSourceReader<Bitmap> {
             }
         }
 
-        return null;
+        return bitmap;
     }
 
     @Override

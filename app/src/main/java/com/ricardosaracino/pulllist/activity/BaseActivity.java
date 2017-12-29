@@ -8,7 +8,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import com.ricardosaracino.pulllist.R;
 
 /*
@@ -90,9 +92,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
         switch (item.getItemId()) {
             case R.id.nav_comics:
-                this.startActivity(new Intent(BaseActivity.this, ComicBookWeekCurrentListActivity.class));
+                this.startActivity(new Intent(BaseActivity.this, ComicBookWeekPagerActivity.class));
 
-                if(this instanceof ComicBookWeekBaseActivity){
+                if(this instanceof ComicBookWeekPagerActivity){
                     finish();
                 }
 

@@ -54,6 +54,8 @@ public class ComicBookSearchListFragment extends BaseComicBookListFragment imple
 
         query = s;
 
+        setEmptyText("");
+
         showProgress(true);
 
         loading = true;

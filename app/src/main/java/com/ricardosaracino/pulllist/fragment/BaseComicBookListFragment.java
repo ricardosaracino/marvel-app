@@ -39,7 +39,7 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setRetainInstance(true);
+        //setRetainInstance(true);
     }
 
     @Override
@@ -47,28 +47,33 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
         super.onActivityCreated(savedInstanceState);
 
-        if (!shown) {
-
+        if(comicBookListAdapter == null) {
             comicBookListAdapter = new ComicBookListAdapter(getActivity());
+        }
 
-            onRestoreInstanceState(savedInstanceState);
+        onRestoreInstanceState(savedInstanceState);
 
-            setListAdapter(comicBookListAdapter);
+        setListAdapter(comicBookListAdapter);
 
-
-            //setListShown(false);
+        if (!shown) {
             showProgress(true);
-
-            getLoaderManager().initLoader(LOADER_ID, null, this);   // calls onCreateLoader
+            getLoaderManager().restartLoader(LOADER_ID, null, this);   // calls onCreateLoader
         }
     }
-
 
     @Override
     public void onLoadFinished(final Loader<List<ComicBook>> loader, List<ComicBook> data) {
 
-        if (comicBookListAdapter.getCount() > 0) {
-            getListView().setOnScrollListener(this);
+        // do before return
+        // Search offset = 0 && prevOffset = 0
+        if (isResumed()) {
+            if (!shown) {
+                shown = true; //might have a race condition onActivityCreated
+            }
+
+            showProgress(false);
+
+            setEmptyText("No Results");
         }
 
         DataSourceReader dataSource = ((ComicBookListDataLoader) loader).getDataSource();
@@ -79,6 +84,15 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
         // todo ViewPager is calling onLoadFinished with previous data so set finished if list is full
         if(offset == prevOffset){
+
+            // if init or restart wasn't called we still want to register the listener
+            if (comicBookListAdapter.getCount() > 0) {
+                getListView().setOnScrollListener(this);
+            }
+
+            // Search offset = 0 && prevOffset = 0
+            showProgress(false);
+
             return;
         }
 
@@ -89,22 +103,11 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
 
         comicBookListAdapter.addAll(data);
 
-        list.addAll(data);
-
-
-        if (isResumed()) {
-            if (!shown) {
-                //setListShown(true);
-                shown = true;
-            }
-
-            showProgress(false);
-
-            setEmptyText("No Results");
-
-        } else {
-            //setListShownNoAnimation(true);
+        if (comicBookListAdapter.getCount() > 0) {
+            getListView().setOnScrollListener(this);
         }
+
+        list.addAll(data);
     }
 
     @Override
@@ -194,7 +197,7 @@ public abstract class BaseComicBookListFragment extends ListFragment implements 
         }
     }
 
-    private void showProgress(boolean visible)
+    protected void showProgress(boolean visible)
     {
         ProgressBar progressBar = getActivity().findViewById(R.id.progressbar);
 
